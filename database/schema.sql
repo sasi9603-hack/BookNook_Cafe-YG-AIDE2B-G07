@@ -1,14 +1,11 @@
--- Enable Foreign Key enforcement in SQLite
 PRAGMA foreign_keys = ON;
 
--- 1. guests table
 CREATE TABLE IF NOT EXISTS guests (
     guest_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     phone TEXT UNIQUE
 );
 
--- 2. games table
 CREATE TABLE IF NOT EXISTS games (
     game_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -16,7 +13,6 @@ CREATE TABLE IF NOT EXISTS games (
     status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'in_use'))
 );
 
--- 3. bookings table
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
     guest_id INTEGER NOT NULL,
@@ -27,12 +23,9 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE RESTRICT
 );
 
--- 4. audit_logs table
--- game_id is intentionally not a cascading foreign key so historical logs are preserved
 CREATE TABLE IF NOT EXISTS audit_logs (
     audit_id INTEGER PRIMARY KEY AUTOINCREMENT,
     action TEXT NOT NULL CHECK (action IN ('CREATE', 'UPDATE', 'DELETE')),
     game_id INTEGER NOT NULL,
     time TEXT NOT NULL
 );
-
