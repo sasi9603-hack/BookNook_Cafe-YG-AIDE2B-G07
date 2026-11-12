@@ -7,10 +7,8 @@ function initDatabase() {
         const schemaPath = path.resolve(__dirname, 'schema.sql');
         const schemaSql = fs.readFileSync(schemaPath, 'utf8');
 
-        // Execute the entire schema script
         db.exec(schemaSql);
 
-        // Verify created tables
         const tables = db
             .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
             .all()
@@ -25,10 +23,8 @@ function initDatabase() {
     }
 }
 
-// If executed directly from command line (e.g. npm run init-db)
 if (require.main === module) {
     initDatabase();
 }
 
 module.exports = { initDatabase };
-
